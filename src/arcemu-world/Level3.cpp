@@ -172,7 +172,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(26, guid);
 		plr->ClearCooldownsOnLine(256, guid);
 		plr->ClearCooldownsOnLine(257 , guid);
-		BlueSystemMessage(m_session, "Cleared all Warrior cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Warrior cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == PALADIN)
@@ -180,7 +180,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(594, guid);
 		plr->ClearCooldownsOnLine(267, guid);
 		plr->ClearCooldownsOnLine(184, guid);
-		BlueSystemMessage(m_session, "Cleared all Paladin cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Paladin cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == HUNTER)
@@ -188,7 +188,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(50, guid);
 		plr->ClearCooldownsOnLine(51, guid);
 		plr->ClearCooldownsOnLine(163, guid);
-		BlueSystemMessage(m_session, "Cleared all Hunter cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Hunter cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == ROGUE)
@@ -196,7 +196,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(253, guid);
 		plr->ClearCooldownsOnLine(38, guid);
 		plr->ClearCooldownsOnLine(39, guid);
-		BlueSystemMessage(m_session, "Cleared all Rogue cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Rogue cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == PRIEST)
@@ -204,7 +204,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(56, guid);
 		plr->ClearCooldownsOnLine(78, guid);
 		plr->ClearCooldownsOnLine(613, guid);
-		BlueSystemMessage(m_session, "Cleared all Priest cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Priest cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == DEATHKNIGHT)
@@ -212,7 +212,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(770, guid);
 		plr->ClearCooldownsOnLine(771, guid);
 		plr->ClearCooldownsOnLine(772, guid);
-		BlueSystemMessage(m_session, "Cleared all Death Knight cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Death Knight cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == SHAMAN)
@@ -220,7 +220,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(373, guid);
 		plr->ClearCooldownsOnLine(374, guid);
 		plr->ClearCooldownsOnLine(375, guid);
-		BlueSystemMessage(m_session, "Cleared all Shaman cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Shaman cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == MAGE)
@@ -228,7 +228,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(6, guid);
 		plr->ClearCooldownsOnLine(8, guid);
 		plr->ClearCooldownsOnLine(237, guid);
-		BlueSystemMessage(m_session, "Cleared all Mage cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Mage cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == WARLOCK)
@@ -236,7 +236,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(355, guid);
 		plr->ClearCooldownsOnLine(354, guid);
 		plr->ClearCooldownsOnLine(593, guid);
-		BlueSystemMessage(m_session, "Cleared all Warlock cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Warlock cooldowns.");
 		return true;
 	}
 	if(plr->getClass() == DRUID)
@@ -244,7 +244,7 @@ bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_
 		plr->ClearCooldownsOnLine(573, guid);
 		plr->ClearCooldownsOnLine(574, guid);
 		plr->ClearCooldownsOnLine(134, guid);
-		BlueSystemMessage(m_session, "Cleared all Druid cooldowns.");
+		//BlueSystemMessage(m_session, "Cleared all Druid cooldowns.");
 		return true;
 	}
 	return true;
@@ -272,7 +272,7 @@ bool ChatHandler::HandleLearnCommand(const char* args, WorldSession* m_session)
 	if(stricmp(args, "all") == 0)
 	{
 		sGMLog.writefromsession(m_session, "taught %s all spells.", plr->GetName());
-		SystemMessage(m_session, "Taught %s all spells.", plr->GetName());
+		//SystemMessage(m_session, "Taught %s all spells.", plr->GetName());
 		static uint32 spellarray[DRUID + 1][512] =
 		{
 			{ 0 }, // N/A
@@ -380,7 +380,7 @@ bool ChatHandler::HandleLearnCommand(const char* args, WorldSession* m_session)
 
 	if(!plr->GetSession()->HasGMPermissions() && (sp->Effect[0] == SPELL_EFFECT_INSTANT_KILL || sp->Effect[1] == SPELL_EFFECT_INSTANT_KILL || sp->Effect[2] == SPELL_EFFECT_INSTANT_KILL))
 	{
-		SystemMessage(m_session, "don't be an idiot and teach players instakill spells. this action has been logged.");
+		//SystemMessage(m_session, "don't be an idiot and teach players instakill spells. this action has been logged.");
 		return true;
 	}
 
@@ -434,15 +434,15 @@ bool ChatHandler::HandleExploreCheatCommand(const char* args, WorldSession* m_se
 
 	if(stricmp(args, "on") == 0)
 	{
-		SystemMessage(m_session, "%s has explored all zones now.", chr->GetName());
+		/*SystemMessage(m_session, "%s has explored all zones now.", chr->GetName());
 		SystemMessage(m_session, "%s has explored all zones for you.", m_session->GetPlayer()->GetName());
-		sGMLog.writefromsession(m_session, "explored all zones for player %s", chr->GetName());
+		sGMLog.writefromsession(m_session, "explored all zones for player %s", chr->GetName());*/
 	}
 	else if(stricmp(args, "off") == 0)
 	{
-		SystemMessage(m_session, "%s has no more explored zones.", chr->GetName());
+		/*SystemMessage(m_session, "%s has no more explored zones.", chr->GetName());
 		SystemMessage(m_session, "%s has hidden all zones from you.", m_session->GetPlayer()->GetName());
-		sGMLog.writefromsession(m_session, "hid all zones for player %s", chr->GetName());
+		sGMLog.writefromsession(m_session, "hid all zones for player %s", chr->GetName());*/
 	}
 	else
 		return false;
@@ -473,7 +473,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession* m_se
 	PlayerInfo* pInfo = NULL;
 	char* pReason;
 	char* pDuration;
-	int32 BanTime = 0;
+	int32 BanTime = 999999;
 	ParseBanArgs(pCharacter, &pDuration, &pReason);
 	if(pDuration != NULL)
 	{
@@ -537,7 +537,7 @@ bool ChatHandler::HandleBanAllCommand(const char* args, WorldSession* m_session)
 	char* pReason;
 	char* pDuration;
 	ParseBanArgs(pCharacter, &pDuration, &pReason);
-	int32 BanTime = 0;
+	int32 BanTime = 999999;
 	if(pDuration != NULL)
 	{
 		BanTime = GetTimePeriodFromString(pDuration);
@@ -1628,18 +1628,11 @@ bool ChatHandler::HandleFlyCommand(const char* args, WorldSession* m_session)
 
 bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_session)
 {
-
-	sWorld.SendWorldText("Support for reloading tables on the fly was disabled in Arcemu revision 3621. You are seeing this message because apparently reading SVN changelog or using forums search is way over the head of some of our users.", 0);
-	return true;
-
-	/*
-
 	char str[200];
 	int ret = 0;
 
 	if(!*args || strlen(args) < 3)
 		return false;
-
 
 	uint32 mstime = getMSTime();
 	snprintf(str, 200, "%s%s initiated server-side reload of table `%s`. The server may experience some lag while this occurs.",
@@ -1650,8 +1643,13 @@ bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_sessio
 	{
 		objmgr.ReloadDisabledSpells();
 		ret = 1;
-	} else
-	if (0 == stricmp(args, "vendors"))
+	} 
+/*	else if (0 == stricmp(args, "spellfixes"))
+	{
+		objmgr.LoadSpellFixes();
+		ret = 1;
+	} */
+	else if (0 == stricmp(args, "vendors"))
 	{
 		objmgr.ReloadVendors();
 		ret = 1;
@@ -1664,13 +1662,10 @@ bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_sessio
 	if (ret == 0)
 		snprintf(str, 200, "%sDatabase reload failed.", MSG_COLOR_LIGHTRED);
 	else
-		snprintf(str, 200, "%sDatabase reload completed in %u ms.", MSG_COLOR_LIGHTBLUE, getMSTime() - mstime);
+		snprintf(str, 200, "%sDatabase reload completed in %u ms.", MSG_COLOR_LIGHTBLUE, (unsigned int)(getMSTime() - mstime));
 	sWorld.SendWorldText(str, 0);
 	sGMLog.writefromsession(m_session, "reloaded table %s", args);
 	return true;
-
-	*/
-
 }
 
 bool ChatHandler::HandleModifyLevelCommand(const char* args, WorldSession* m_session)
@@ -1681,7 +1676,7 @@ bool ChatHandler::HandleModifyLevelCommand(const char* args, WorldSession* m_ses
 	uint32 Level = args ? atol(args) : 0;
 	if(Level == 0 || Level > sWorld.m_levelCap)
 	{
-		RedSystemMessage(m_session, "A level (numeric) is required to be specified after this command.");
+		SystemMessage(m_session, "A level (numeric) is required to be specified after this command.");
 		return true;
 	}
 
@@ -1695,7 +1690,7 @@ bool ChatHandler::HandleModifyLevelCommand(const char* args, WorldSession* m_ses
 	LevelInfo* Info = objmgr.GetLevelInfo(plr->getRace(), plr->getClass(), Level);
 	if(Info == NULL)
 	{
-		RedSystemMessage(m_session, "Levelup information not found.");
+		SystemMessage(m_session, "Levelup information not found.");
 		return true;
 	}
 
