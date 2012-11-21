@@ -597,6 +597,8 @@ uint32 CalculateDamage(Unit* pAttacker, Unit* pVictim, uint32 weapon_damage_type
 
 	//type of this UNIT_FIELD_ATTACK_POWER_MODS is unknown, not even uint32 disabled for now.
 
+	int damageRate = 85.0f; // custom rate for the damage done (player case)
+
 	uint32 offset;
 	Item* it = NULL;
 
@@ -686,7 +688,7 @@ uint32 CalculateDamage(Unit* pAttacker, Unit* pVictim, uint32 weapon_damage_type
 			}
 		}
 
-		bonus = (wspeed - pAttacker->GetBaseAttackTime(RANGED)) / 14000.0f * ap;
+		bonus = (wspeed - pAttacker->GetBaseAttackTime(RANGED)) / 14000.0f * ap * damageRate;
 		min_damage += bonus;
 		max_damage += bonus;
 	}
@@ -768,8 +770,8 @@ uint32 CalculateDamage(Unit* pAttacker, Unit* pVictim, uint32 weapon_damage_type
 		min_damage += bonus;
 		max_damage += bonus;
 	}
-	float diff = fabs(max_damage - min_damage);
-	float result = min_damage;
+	float diff = fabs(max_damage - min_damage) * damageRate;
+	float result = min_damage * 50.0f; // because minimum dmg is too low
 
 	if(diff >= 1)
 		result += RandomFloat(diff);
