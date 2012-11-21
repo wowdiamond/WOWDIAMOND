@@ -400,6 +400,7 @@ class SERVER_DECL World : public Singleton<World>, public EventableObject
 		void SendFactionMessage(WorldPacket* packet, uint8 teamId);
 		void SendGamemasterMessage(WorldPacket* packet, WorldSession* self = 0);
 		void SendGMWorldText(const char* text, WorldSession* self = 0);
+		void SendMessageToGMs(WorldSession *self, const char * text, ...);
 		void SendDamageLimitTextToGM(const char* playername, const char* dmglog);
 		void SendBCMessageByID(uint32 id);
 		void SendLocalizedWorldText(bool wide, const char* format, ...);

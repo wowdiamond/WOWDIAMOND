@@ -779,6 +779,28 @@ void World::SendWorldWideScreenText(const char* text, WorldSession* self)
 	SendGlobalMessage(&data, self);
 }
 
+void World::SendMessageToGMs(WorldSession *self, const char * text, ...)
+{
+	char buf[500];
+	va_list ap;
+	va_start(ap, text);
+	vsnprintf(buf, 500, text, ap);
+	va_end(ap);
+
+	WorldPacket *data = sChatHandler.FillSystemMessageData(buf);
+	m_sessionlock.AcquireReadLock();
+	SessionMap::iterator itr;
+	for (itr = m_sessions.begin(); itr != m_sessions.end(); itr++)
+	{
+		if( itr->second != self && itr->second->HasGMPermissions() && itr->second->GetPlayer() != NULL )
+			itr->second->SendPacket(data);
+	}
+	m_sessionlock.ReleaseReadLock();
+
+	delete data;
+}
+
+
 void World::UpdateSessions(uint32 diff)
 {
 	SessionSet::iterator itr, it2;
