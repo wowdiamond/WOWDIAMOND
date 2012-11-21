@@ -8490,16 +8490,6 @@ void Player::UpdatePvPArea()
 	}
 #endif
 
-	if(HasFlag(PLAYER_FLAGS, PLAYER_FLAG_GM))
-	{
-		if(IsPvPFlagged())
-			RemovePvPFlag();
-		else
-			StopPvPTimer();
-		RemoveFFAPvPFlag();
-		return;
-	}
-
 	// This is where all the magic happens :P
 	if((at->category == AREAC_ALLIANCE_TERRITORY && IsTeamAlliance()) || (at->category == AREAC_HORDE_TERRITORY && IsTeamHorde()))
 	{
