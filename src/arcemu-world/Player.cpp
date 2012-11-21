@@ -4454,7 +4454,49 @@ void Player::RepopRequestedPlayer()
 		{
 			if(pMapinfo->type == INSTANCE_NULL || pMapinfo->type == INSTANCE_BATTLEGROUND)
 			{
-				RepopAtGraveyard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+				bool amd_repopMap_bool;
+
+				char* lastMSGE[1024];
+
+				Player* plr = GetSession()->GetPlayer(); 
+
+				QueryResult * Query_amd_repopMap = WorldDatabase.Query("SELECT `mapID` FROM `custom_repops` WHERE `mapID`='%u'", pMapinfo->mapid); 
+
+				if(!Query_amd_repopMap)
+				{
+					amd_repopMap_bool = false;
+				}
+				else
+				{
+					amd_repopMap_bool = true;
+					snprintf((char*)lastMSGE, 1024, "Map ID: %u", pMapinfo->mapid);
+
+					QueryResult * Query_amd_repopMapActive = WorldDatabase.Query("SELECT `Active` FROM `custom_repops` WHERE `mapID`='%u'", pMapinfo->mapid);
+
+					Field * amd_repopMapActive = Query_amd_repopMapActive->Fetch();
+
+						if(amd_repopMapActive->GetInt32() == 1) // map is active
+						{
+							snprintf((char*)lastMSGE, 1024, "%s |cff00FF00is active|r", lastMSGE);
+							plr->EventTeleport(pMapinfo->mapid, plr->GetPositionX(), plr->GetPositionY(), plr->GetPositionZ()); 
+						}
+						else // deactivated
+						{
+							snprintf((char*)lastMSGE, 1024, "%s |cffFF0000is inactive|r", lastMSGE);
+							RepopAtGraveyard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+						}
+				}
+
+				if(amd_repopMap_bool == false)
+				{
+					RepopAtGraveyard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+					plr->BroadcastMessage("[|cff00FF00DS_REPOP|r]: Default repop.");
+				}
+				else
+				{
+					plr->BroadcastMessage("[|cff00FF00DS_REPOP|r]: %s.", lastMSGE);
+					//if found then dont take any action
+				}
 			}
 			else
 			{
@@ -5149,12 +5191,13 @@ void Player::UpdateChances()
 			}
 		}
 	}
-
+	int csMeleeMinCritRate = 45.0f;
 	float cr = tmp + CalcRating(PLAYER_RATING_MODIFIER_MELEE_CRIT) + melee_bonus;
-	SetFloatValue(PLAYER_CRIT_PERCENTAGE, min(cr, 95.0f));
+	SetFloatValue(PLAYER_CRIT_PERCENTAGE, min(cr + csMeleeMinCritRate, 95.0f));
 
+	int csRangedMinCritRate = 45.0f;
 	float rcr = tmp + CalcRating(PLAYER_RATING_MODIFIER_RANGED_CRIT) + ranged_bonus;
-	SetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE, min(rcr, 95.0f));
+	SetFloatValue(PLAYER_RANGED_CRIT_PERCENTAGE, min(rcr + csRangedMinCritRate, 95.0f));
 
 	gtFloat* SpellCritBase  = dbcSpellCritBase.LookupEntry(pClass - 1);
 	gtFloat* SpellCritPerInt = dbcSpellCrit.LookupEntry(pLevel - 1 + (pClass - 1) * 100);
@@ -8490,6 +8533,16 @@ void Player::UpdatePvPArea()
 	}
 #endif
 
+	if(HasFlag(PLAYER_FLAGS, PLAYER_FLAG_GM))
+	{
+		if(IsPvPFlagged())
+			RemovePvPFlag();
+		else
+			StopPvPTimer();
+		RemoveFFAPvPFlag();
+		return;
+	}
+
 	// This is where all the magic happens :P
 	if((at->category == AREAC_ALLIANCE_TERRITORY && IsTeamAlliance()) || (at->category == AREAC_HORDE_TERRITORY && IsTeamHorde()))
 	{
@@ -9062,16 +9115,53 @@ void Player::ModifyBonuses(uint32 type, int32 val, bool apply)
 			}
 			break;
 		case AGILITY:	//modify agility
-		case STRENGTH:	//modify strength
-		case INTELLECT:	//modify intellect
-		case SPIRIT:	//modify spirit
-		case STAMINA:	//modify stamina
 			{
 				uint8 convert[] = {1, 0, 3, 4, 2};
 				if(_val > 0)
 					FlatStatModPos[ convert[ type - 3 ] ] += val;
 				else
 					FlatStatModNeg[ convert[ type - 3 ] ] -= val;
+				CalcStat(convert[ type - 3 ]);
+			}
+			break;
+		case STRENGTH:	//modify strength
+			{
+				uint8 convert[] = {1, 0, 3, 4, 2};
+				if(_val > 0)
+					FlatStatModPos[ convert[ type - 3 ] ] += val;
+				else
+					FlatStatModNeg[ convert[ type - 3 ] ] -= val;
+				CalcStat(convert[ type - 3 ]);
+			}
+			break;
+		case INTELLECT:	//modify intellect
+			{
+				uint8 convert[] = {1, 0, 3, 4, 2};
+				if(_val > 0)
+					FlatStatModPos[ convert[ type - 3 ] ] += val;
+				else
+					FlatStatModNeg[ convert[ type - 3 ] ] -= val;
+				CalcStat(convert[ type - 3 ]);
+			}
+			break;
+		case SPIRIT:	//modify spirit
+			{
+				uint8 convert[] = {1, 0, 3, 4, 2};
+				if(_val > 0)
+					FlatStatModPos[ convert[ type - 3 ] ] += val;
+				else
+					FlatStatModNeg[ convert[ type - 3 ] ] -= val;
+				CalcStat(convert[ type - 3 ]);
+			}
+			break;
+		case STAMINA:	//modify stamina
+			{
+				int csRate7 = 100.0f; // Increase rate for Stamina
+				uint8 convert[] = {1, 0, 3, 4, 2};
+				if(_val > 0)
+					FlatStatModPos[ convert[ type - 3 ] ] += val * csRate7;
+				else
+					FlatStatModNeg[ convert[ type - 3 ] ] -= val * csRate7;
 				CalcStat(convert[ type - 3 ]);
 			}
 			break;
@@ -9521,12 +9611,12 @@ void Player::CalcDamage()
 		  )
 			tmp += i->second.value;
 	}
-
-	r = BaseDamage[0] + delta + bonus;
+	int csMainHRate = 145.0f; // Increase Main Hand Melee Damage
+	r = BaseDamage[0] + delta + bonus * csMainHRate;
 	r *= tmp;
 	SetMinDamage(r > 0 ? r : 0);
 
-	r = BaseDamage[1] + delta + bonus;
+	r = BaseDamage[1] + delta + bonus * csMainHRate;
 	r *= tmp;
 	SetMaxDamage(r > 0 ? r : 0);
 
@@ -9564,11 +9654,11 @@ void Player::CalcDamage()
 			  )
 				tmp += i->second.value;
 		}
-
-		r = (BaseOffhandDamage[0] + delta + bonus) * offhand_dmg_mod;
+		int csOffHRate = 60.0f; // Increase Off Hand Melee Damage
+		r = (BaseOffhandDamage[0] + delta + bonus) * offhand_dmg_mod * csOffHRate;
 		r *= tmp;
 		SetMinOffhandDamage(r > 0 ? r : 0);
-		r = (BaseOffhandDamage[1] + delta + bonus) * offhand_dmg_mod;
+		r = (BaseOffhandDamage[1] + delta + bonus) * offhand_dmg_mod * csOffHRate;
 		r *= tmp;
 		SetMaxOffhandDamage(r > 0 ? r : 0);
 		if(m_wratings.size())
@@ -9615,12 +9705,12 @@ void Player::CalcDamage()
 			}
 		}
 		else bonus = 0;
-
-		r = BaseRangedDamage[0] + delta + bonus;
+		int csRangedWRate = 130.0f; // Increase Ranged Weapon Damage
+		r = BaseRangedDamage[0] + delta + bonus * csRangedWRate;
 		r *= tmp;
 		SetMinRangedDamage(r > 0 ? r : 0);
 
-		r = BaseRangedDamage[1] + delta + bonus;
+		r = BaseRangedDamage[1] + delta + bonus * csRangedWRate;
 		r *= tmp;
 		SetMaxRangedDamage(r > 0 ? r : 0);
 
