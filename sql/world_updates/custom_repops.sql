@@ -11,8 +11,8 @@
 /*!40014 SET FOREIGN_KEY_CHECKS=0 */;
 
 -- Dumping structure for table game.ds_repops
-DROP TABLE IF EXISTS `ds_repops`;
-CREATE TABLE IF NOT EXISTS `ds_repops` (
+DROP TABLE IF EXISTS `custom_repops`;
+CREATE TABLE IF NOT EXISTS `custom_repops` (
   `mapID` tinyint(4) NOT NULL,
   `Active` tinyint(4) NOT NULL DEFAULT '1',
   UNIQUE KEY `MapID` (`mapID`)
