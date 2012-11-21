@@ -432,6 +432,22 @@ bool World::SetInitialWorldSettings()
 
 	// wait for all loading to complete.
 	tl.wait();
+
+	#ifdef ENABLE_FIXSPELL_LEISA
+	InitSpellNameHash();//通过namehash修复技能数据 by 【雷】
+	InitMiscSpells();
+	InitDruidSpells();
+	InitHunterSpells();
+	InitMageSpells();
+	InitPaladinSpells();
+	InitPriestSpells();
+	InitRogueSpells();
+	InitShamanSpells();
+	InitWarlockSpells();
+	InitWarriorSpells();
+	InitItemsSpells();
+#endif
+
 	sLocalizationMgr.Reload(false);
 
 	CommandTableStorage::getSingleton().Load();

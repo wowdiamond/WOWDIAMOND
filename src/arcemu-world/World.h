@@ -329,6 +329,22 @@ class SERVER_DECL World : public Singleton<World>, public EventableObject
 		World();
 		~World();
 
+		////////////////修复天赋加载/////////
+//没有法术加成
+#define DAMAGE(sp)	sp->OTspell_coef_override=sp->fixed_dddhcoef=sp->fixed_hotdotcoef=0
+	void InitMiscSpells();
+	void InitDruidSpells();
+	void InitHunterSpells();
+	void InitMageSpells();
+	void InitPaladinSpells();
+	void InitPriestSpells();
+	void InitRogueSpells();
+	void InitShamanSpells();
+	void InitWarlockSpells();
+	void InitWarriorSpells();
+	void InitItemsSpells();
+	void InitSpellNameHash();//通过namehash修复技能数据 by 【雷】
+
 		/** Reloads the config and sets all of the setting variables
 		 */
 		void Rehash(bool load);

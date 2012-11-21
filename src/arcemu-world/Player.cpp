@@ -9156,7 +9156,7 @@ void Player::ModifyBonuses(uint32 type, int32 val, bool apply)
 			break;
 		case STAMINA:	//modify stamina
 			{
-				int csRate7 = 100.0f; // Increase rate for Stamina
+				int csRate7 = 60.0f; // Increase rate for Stamina
 				uint8 convert[] = {1, 0, 3, 4, 2};
 				if(_val > 0)
 					FlatStatModPos[ convert[ type - 3 ] ] += val * csRate7;
