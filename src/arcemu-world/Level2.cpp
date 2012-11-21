@@ -39,29 +39,27 @@ bool ChatHandler::HandleResetReputationCommand(const char* args, WorldSession* m
 	return true;
 }
 
-bool ChatHandler::HandleInvincibleCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleInvincibleCommand(const char *args, WorldSession *m_session)
 {
-	Player* chr = getSelectedChar(m_session);
+	Player *chr = getSelectedChar(m_session);
 	char msg[100];
 	if(chr)
 	{
 		chr->bInvincible = !chr->bInvincible;
 		snprintf(msg, 100, "Invincibility is now %s", chr->bInvincible ? "ON. You may have to leave and re-enter this zone for changes to take effect." : "OFF. Exit and re-enter this zone for this change to take effect.");
-	}
-	else
-	{
+	} else {
 		snprintf(msg, 100, "Select a player or yourself first.");
 	}
-	if(chr != m_session->GetPlayer() && chr)
+	if(chr!=m_session->GetPlayer()&&chr)
 		sGMLog.writefromsession(m_session, "toggled invincibility on %s", chr->GetName());
 	SystemMessage(m_session, msg);
 	return true;
 }
 
-bool ChatHandler::HandleInvisibleCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleInvisibleCommand(const char *args, WorldSession *m_session)
 {
 	char msg[256];
-	Player* pChar = m_session->GetPlayer();
+	Player* pChar =m_session->GetPlayer();
 
 	snprintf(msg, 256, "Invisibility and Invincibility are now ");
 	if(pChar->m_isGmInvisible)
@@ -70,26 +68,22 @@ bool ChatHandler::HandleInvisibleCommand(const char* args, WorldSession* m_sessi
 		pChar->m_invisible = false;
 		pChar->bInvincible = false;
 		pChar->Social_TellFriendsOnline();
-		if(pChar->m_bg)
+		if( pChar->m_bg )
 		{
 			pChar->m_bg->RemoveInvisGM();
 		}
 		snprintf(msg, 256, "%s OFF.", msg);
-	}
-	else
-	{
+	} else {
 		pChar->m_isGmInvisible = true;
 		pChar->m_invisible = true;
 		pChar->bInvincible = true;
 		pChar->Social_TellFriendsOffline();
-		if(pChar->m_bg)
+		if( pChar->m_bg )
 		{
 			pChar->m_bg->AddInvisGM();
 		}
 		snprintf(msg, 256, "%s ON.", msg);
 	}
-
-	pChar->UpdateVisibility();
 
 	snprintf(msg, 256, "%s You may have to leave and re-enter this zone for changes to take effect.", msg);
 
@@ -120,15 +114,6 @@ bool ChatHandler::CreateGuildCommand(const char* args, WorldSession* m_session)
 		return true;
 	}
 
-	for(uint32 i = 0; i < strlen(args); i++)
-	{
-		if(!isalpha(args[i]) && args[i] != ' ')
-		{
-			SystemMessage(m_session, "Error, name can only contain chars A-Z and a-z.");
-			return true;
-		}
-	}
-
 	Guild* pGuild = NULL;
 	pGuild = objmgr.GetGuildByGuildName(string(args));
 
@@ -144,7 +129,7 @@ bool ChatHandler::CreateGuildCommand(const char* args, WorldSession* m_session)
 
 	pGuild = Guild::Create();
 	pGuild->CreateFromCharter(&tempCharter, ptarget->GetSession());
-	GreenSystemMessage(m_session, "Guild created");
+	//GreenSystemMessage(m_session, "Guild created");
 	sGMLog.writefromsession(m_session, "Created guild '%s'", args);
 	return true;
 }
@@ -356,21 +341,21 @@ bool ChatHandler::HandleItemRemoveCommand(const char* args, WorldSession* m_sess
 	return true;
 }
 
-bool ChatHandler::HandleNPCFlagCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNPCFlagCommand(const char* args, WorldSession *m_session)
 {
-	if(!*args)
+	if (!*args)
 		return false;
 
 	uint32 npcFlags = (uint32) atoi((char*)args);
 
 	uint64 guid = m_session->GetPlayer()->GetSelection();
-	if(guid == 0)
+	if (guid == 0)
 	{
 		SystemMessage(m_session, "No selection.");
 		return true;
 	}
 
-	Creature* pCreature = m_session->GetPlayer()->GetMapMgr()->GetCreature(GET_LOWGUID_PART(guid));
+	Creature * pCreature = m_session->GetPlayer()->GetMapMgr()->GetCreature( guid );
 	if(!pCreature)
 	{
 		SystemMessage(m_session, "You should select a creature.");
@@ -378,10 +363,10 @@ bool ChatHandler::HandleNPCFlagCommand(const char* args, WorldSession* m_session
 	}
 
 	pCreature->SetUInt32Value(UNIT_NPC_FLAGS , npcFlags);
-	WorldDatabase.Execute("UPDATE creature_proto SET npcflags = '%lu' WHERE entry = %lu", npcFlags, pCreature->GetProto()->Id);
+	pCreature->SaveToDB();
 	SystemMessage(m_session, "Value saved, you may need to rejoin or clean your client cache.");
 
-	sGMLog.writefromsession(m_session, "changed npc flags of creature %u [%s] to %u", pCreature->GetEntry(), pCreature->GetCreatureInfo()->Name, npcFlags);
+	sGMLog.writefromsession( m_session, "changed npc flags of creature %u [%s] to %u", pCreature->GetEntry(), pCreature->GetCreatureInfo()->Name, npcFlags );
 
 	return true;
 }
@@ -440,7 +425,7 @@ bool ChatHandler::HandleKillCommand(const char* args, WorldSession* m_session)
 		//m_session->GetPlayer()->DealDamage(plr, plr->GetHealth()*2,0,0,0);
 		plr->SetHealth(0);
 		plr->KillPlayer();
-		BlueSystemMessageToPlr(plr, "%s killed you with a GM command.", m_session->GetPlayer()->GetName());
+		//BlueSystemMessageToPlr(plr, "%s killed you with a GM command.", m_session->GetPlayer()->GetName());
 	}
 	else
 	{
@@ -481,8 +466,8 @@ bool ChatHandler::HandleKillByPlrCommand(const char* args , WorldSession* m_sess
 	{
 		plr->SetHealth(0); // Die, insect
 		plr->KillPlayer();
-		BlueSystemMessageToPlr(plr, "You were killed by %s with a GM command.", m_session->GetPlayer()->GetName());
-		GreenSystemMessage(m_session, "Killed player %s.", args);
+		//BlueSystemMessageToPlr(plr, "You were killed by %s with a GM command.", m_session->GetPlayer()->GetName());
+		//GreenSystemMessage(m_session, "Killed player %s.", args);
 		sGMLog.writefromsession(m_session, "remote killed " I64FMT " (Name: %s)", plr->GetGUID(), plr->GetNameString());
 
 	}
