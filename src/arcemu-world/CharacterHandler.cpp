@@ -1001,28 +1001,12 @@ void WorldSession::FullLogin(Player* plr)
 	}
 #endif
 
+	// Send MOTD
+	_player->BroadcastMessage(sWorld.GetMotd());
 
-#ifdef WIN32
-	_player->BroadcastMessage("Server: %sArcEmu %s - %s-Windows-%s", MSG_COLOR_WHITE, BUILD_TAG, CONFIG, ARCH);
-#else
-	_player->BroadcastMessage("Server: %sArcEmu %s - %s-%s", MSG_COLOR_WHITE, BUILD_TAG, PLATFORM_TEXT, ARCH);
-#endif
-
-	// Revision
-	_player->BroadcastMessage("Build hash: %s%s", MSG_COLOR_CYAN, BUILD_HASH_STR);
-	// Bugs
-	_player->BroadcastMessage("Bugs: %s%s", MSG_COLOR_SEXHOTPINK, BUGTRACKER);
-	// Recruiting message
-	_player->BroadcastMessage(RECRUITING);
-	// Shows Online players, and connection peak
-	_player->BroadcastMessage("Online Players: %s%u |rPeak: %s%u|r Accepted Connections: %s%u",
-	                          MSG_COLOR_SEXGREEN, sWorld.GetSessionCount(), MSG_COLOR_SEXBLUE, sWorld.PeakSessionCount, MSG_COLOR_SEXBLUE, sWorld.mAcceptedConnections);
-
-	// Shows Server uptime
-	_player->BroadcastMessage("Server Uptime: |r%s", sWorld.GetUptimeString().c_str());
-
-	// server Message Of The Day
-	SendMOTD();
+		// send to gms
+	if( HasGMPermissions() )
+		sWorld.SendMessageToGMs(this,"GM %s (%s) is now online. (Permissions: [%s])", _player->GetName(), GetAccountNameS(), GetPermissions());
 
 	//Set current RestState
 	if(plr->m_isResting)
@@ -1052,7 +1036,7 @@ void WorldSession::FullLogin(Player* plr)
 
 }
 
-bool ChatHandler::HandleRenameCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleRenameCommand(const char * args, WorldSession * m_session)
 {
 	// prevent buffer overflow
 	if(strlen(args) > 100)
@@ -1064,21 +1048,21 @@ bool ChatHandler::HandleRenameCommand(const char* args, WorldSession* m_session)
 	if(sscanf(args, "%s %s", name1, name2) != 2)
 		return false;
 
-	if(VerifyName(name2, strlen(name2)) != E_CHAR_NAME_SUCCESS)
+	if( VerifyName( name2, strlen( name2 ) ) != E_CHAR_NAME_SUCCESS )
 	{
 		RedSystemMessage(m_session, "That name is invalid or contains invalid characters.");
 		return true;
 	}
 
 	string new_name = name2;
-	PlayerInfo* pi = objmgr.GetPlayerInfoByName(name1);
+	PlayerInfo * pi = objmgr.GetPlayerInfoByName(name1);
 	if(pi == 0)
 	{
 		RedSystemMessage(m_session, "Player not found with this name.");
 		return true;
 	}
 
-	if(objmgr.GetPlayerInfoByName(new_name.c_str()) != NULL)
+	if( objmgr.GetPlayerInfoByName(new_name.c_str()) != NULL )
 	{
 		RedSystemMessage(m_session, "Player found with this name in use already.");
 		return true;
@@ -1090,7 +1074,7 @@ bool ChatHandler::HandleRenameCommand(const char* args, WorldSession* m_session)
 	pi->name = strdup(new_name.c_str());
 
 	// look in world for him
-	Player* plr = objmgr.GetPlayer(pi->guid);
+	Player * plr = objmgr.GetPlayer(pi->guid);
 	if(plr != 0)
 	{
 		plr->SetName(new_name);
