@@ -1739,7 +1739,8 @@ void Aura::SpellAuraPeriodicDamage(bool apply)
 					for(int i = 0; i < 5; i++)
 						if(it->GetProto()->Damage[i].Type == SCHOOL_NORMAL)
 							dmg += int32((it->GetProto()->Damage[i].Min + it->GetProto()->Damage[i].Max) / 2);
-					dmg = multiplyer * dmg / 100;
+					int csDeepWoundsRate = 65.0f; // Warrior Bleed Damage Increase Rate
+					dmg = multiplyer * dmg / 100 * csDeepWoundsRate;
 				}
 			}
 		}
