@@ -393,6 +393,7 @@ class SERVER_DECL World : public Singleton<World>, public EventableObject
 
 		void SendWorldText(const char* text, WorldSession* self = 0);
 		void SendWorldWideScreenText(const char* text, WorldSession* self = 0);
+		void SendWorldRaidWarningText(const char* text, WorldSession* self = 0);
 		void SendGlobalMessage(WorldPacket* packet, WorldSession* self = 0);
 
 

@@ -795,6 +795,32 @@ void World::SendWorldWideScreenText(const char* text, WorldSession* self)
 	SendGlobalMessage(&data, self);
 }
 
+void World::SendWorldRaidWarningText(const char* text, WorldSession* self)
+{
+	uint32 textLen = (uint32)strlen((char*)text) + 1;
+
+	WorldPacket data(textLen + 40);
+
+	data.Initialize(SMSG_MESSAGECHAT);
+	data << uint8(CHAT_MSG_RAID_WARNING);
+	data << uint32(LANG_UNIVERSAL);
+
+	data << (uint64)0;
+	data << (uint32)0;
+	data << (uint64)0;
+
+	data << textLen;
+	data << text;
+	data << uint8(0);
+
+	SendGlobalMessage(&data, self);
+
+	if(announce_output)
+	{
+		sLog.outString("> %s", text);
+	}
+}
+
 void World::SendMessageToGMs(WorldSession *self, const char * text, ...)
 {
 	char buf[500];
