@@ -54,9 +54,9 @@ uint16 GetItemIDFromLink(const char* itemlink, uint32* itemid)
 	return (ptr - itemlink) & 0x0000ffff;
 }
 
-bool ChatHandler::HandleAnnounceCommand(const char* args, WorldSession *m_session)
+bool ChatHandler::HandleAnnounceCommand(const char* args, WorldSession* m_session)
 {
-	if( !*args || strlen(args) < 4 || strchr(args, '%'))
+if(!*args || strlen(args) < 4 || strchr(args, '%'))
 	{
 		m_session->SystemMessage("Announces cannot contain the %% character and must be at least 4 characters.");
 		return true;
@@ -71,38 +71,41 @@ bool ChatHandler::HandleAnnounceCommand(const char* args, WorldSession *m_sessio
 	input2 += sWorld.ann_gmtagcolor;
 	if(sWorld.GMAdminTag)
 	{
-		if(m_session->CanUseCommand('z')) input2+="<Admin>";
-		else if(m_session->GetPermissionCount()) input2+="<GM>";
+		if(m_session->CanUseCommand('z')) input2 += " "MSG_GM_ICON" <Admin> ";
+		else if(m_session->GetPermissionCount()) input2 += " "MSG_GM_ICON" <G.M> ";
 	}
 	if(sWorld.NameinAnnounce)
 	{
-		input2+="|r"+sWorld.ann_namecolor+"|Hplayer:";
-	input2+=m_session->GetPlayer()->GetName();
-	input2+="|h[";
-	input2+=m_session->GetPlayer()->GetName();
-	input2+="]|h:|r "+sWorld.ann_msgcolor;
+		input2 += "|r" + sWorld.ann_namecolor + "|Hplayer:";
+		input2 += m_session->GetPlayer()->GetName();
+		input2 += "|h[";
+		input2 += m_session->GetPlayer()->GetName();
+		input2 += "]|h:|r " + sWorld.ann_msgcolor;
 	}
-	else if(!sWorld.NameinAnnounce) {input2+= ": "; input2+= sWorld.ann_msgcolor;}
+	else if(!sWorld.NameinAnnounce) {input2 += ": "; input2 += sWorld.ann_msgcolor;}
 	snprintf((char*)msg, 1024, "%s%s", input2.c_str(), args);
+	sWorld.SendWorldRaidWarningText(msg); // send message raid warning style
 	sWorld.SendWorldText(msg); // send message
 	sGMLog.writefromsession(m_session, "used announce command, [%s]", args);
 	return true;
 }
 
-bool ChatHandler::HandleGMAnnounceCommand(const char* args, WorldSession *m_session)
+bool ChatHandler::HandleGMAnnounceCommand(const char* args, WorldSession* m_session)
 {
 	if(!*args)
-	{printf("HandleGMAnnounceCommand !args = failed\n");
-	return false;}
+	{
+		LOG_ERROR("HandleGMAnnounceCommand !args = failed");
+		return false;
+	}
 
 	char GMAnnounce[1024];
-	snprintf(GMAnnounce, 1024, MSG_COLOR_RED"[Team]"MSG_COLOR_GREEN" |Hplayer:%s|h[%s]|h:"MSG_COLOR_YELLOW" %s", m_session->GetPlayer()->GetName(), m_session->GetPlayer()->GetName(), args);
+	snprintf(GMAnnounce, 1024, MSG_COLOR_RED "[Team]" MSG_COLOR_GREEN " |Hplayer:%s|h[%s]|h:" MSG_COLOR_YELLOW " %s", m_session->GetPlayer()->GetName(), m_session->GetPlayer()->GetName(), args);
 	sWorld.SendGMWorldText(GMAnnounce);
 	sGMLog.writefromsession(m_session, "used team announce command, [%s]", args);
 	return true;
 }
 
-bool ChatHandler::HandleWAnnounceCommand(const char* args, WorldSession *m_session)
+bool ChatHandler::HandleWAnnounceCommand(const char* args, WorldSession* m_session)
 {
 	if(!*args)
 		return false;
@@ -116,16 +119,16 @@ bool ChatHandler::HandleWAnnounceCommand(const char* args, WorldSession *m_sessi
 	input3 += sWorld.ann_gmtagcolor;
 	if(sWorld.GMAdminTag)
 	{
-		if(m_session->CanUseCommand('z')) input3+="<Admin>";
-		else if(m_session->GetPermissionCount()) input3+="<GM>";
+		if(m_session->CanUseCommand('z')) input3 += "<Admin>";
+		else if(m_session->GetPermissionCount()) input3 += "<GM>";
 	}
 	if(sWorld.NameinWAnnounce)
 	{
-	input3+="|r"+sWorld.ann_namecolor+"[";
-	input3+=m_session->GetPlayer()->GetName();
-	input3+="]:|r "+sWorld.ann_msgcolor;
+		input3 += "|r" + sWorld.ann_namecolor + "[";
+		input3 += m_session->GetPlayer()->GetName();
+		input3 += "]:|r " + sWorld.ann_msgcolor;
 	}
-	else if(!sWorld.NameinWAnnounce) {input3+= ": "; input3+= sWorld.ann_msgcolor;}
+	else if(!sWorld.NameinWAnnounce) {input3 += ": "; input3 += sWorld.ann_msgcolor;}
 	snprintf((char*)pAnnounce, 1024, "%s%s", input3.c_str(), args);
 
 	sWorld.SendWorldWideScreenText(pAnnounce); // send message
