@@ -324,22 +324,23 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			}
 			break;
-		case CHAT_MSG_OFFICER:
-			{
-				if(sChatHandler.ParseCommands(msg.c_str(), this) > 0)
-					break;
-
-				if(g_chatFilter->Parse(msg) == true)
-				{
-					SystemMessage("Your chat message was blocked by a server-side filter.");
-					return;
-				}
-
-				if(_player->m_playerInfo->guild)
-					_player->m_playerInfo->guild->OfficerChat(msg.c_str(), this, lang);
-
-			}
-			break;
+    case CHAT_MSG_OFFICER:
+                    {
+                    if (GetPlayer()->GetSession()->CanUseCommand('1'))
+                            {
+                                char vipunu[1024];
+                                    snprintf(vipunu, 1024, "|cff996600[World Channel] [|cff663300|Hplayer:%s|h%s|h|cff333300]: %s|r", GetPlayer()->GetName(), GetPlayer()->GetName(), msg.c_str());
+                            sWorld.SendWorldText(vipunu);
+                            }
+                            else
+                            {
+                            Player * Plr = GetPlayer();
+                                char player[1024];
+                                snprintf(player, 1024, "|cff996600[World Channel] [|cff663300|Hplayer:%s|h%s|h|cff333300]: %s|r", GetPlayer()->GetName(), GetPlayer()->GetName(), msg.c_str());
+                            sWorld.SendWorldText(player);
+                        }
+     
+                    } break;
 		case CHAT_MSG_YELL:
 			{
 				if(sWorld.interfaction_chat && lang > 0)
