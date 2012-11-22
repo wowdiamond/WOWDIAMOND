@@ -5140,8 +5140,42 @@ void Spell::Heal(int32 amount, bool ForceCrit)
 				break;
 		}
 
-		int csBonusHealRate = 160.0f;
-		amount += bonus * csBonusHealRate;
+		int csBH = 1.0f;
+		switch(p_caster->getClass())
+		{
+			case WARRIOR:
+				csBH = 1.0f;
+				break;
+			case ROGUE:
+				csBH = 1.0f;
+				break;
+			case PALADIN:
+				csBH = 300.0f; // paladin ok on 300%
+				break;
+			case HUNTER:
+				csBH = 1.0f;
+				break;
+			case WARLOCK:
+				csBH = 300.0f;
+				break;
+			case PRIEST:
+				csBH = 300.0f;
+				break;
+			case MAGE:
+				csBH = 100.0f;
+				break;
+			case SHAMAN:
+				csBH = 850.0f;
+				break;
+			case DRUID:
+				csBH = 400.0f; // druid ok on 300%
+				break;
+			case DEATHKNIGHT:
+				csBH = 1.0f;
+				break;
+		}		
+
+		amount += bonus * csBH;
 		amount += amount * (int32)(u_caster->HealDonePctMod[ school ]);
 		amount += float2int32(amount * unitTarget->HealTakenPctMod[ school ]);
 
