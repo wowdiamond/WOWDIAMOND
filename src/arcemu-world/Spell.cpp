@@ -5140,7 +5140,8 @@ void Spell::Heal(int32 amount, bool ForceCrit)
 				break;
 		}
 
-		amount += bonus;
+		int csBonusHealRate = 160.0f;
+		amount += bonus * csBonusHealRate;
 		amount += amount * (int32)(u_caster->HealDonePctMod[ school ]);
 		amount += float2int32(amount * unitTarget->HealTakenPctMod[ school ]);
 
