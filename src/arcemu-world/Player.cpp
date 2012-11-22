@@ -3635,6 +3635,50 @@ void Player::OnPushToWorld()
 			startlevel = static_cast<uint8>(max(55, sWorld.StartingLevel));
 		else startlevel = static_cast<uint8>(sWorld.StartingLevel);
 
+		char welcomenewplayer[1024];
+
+		if(class_ == DEATHKNIGHT)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s deathknight [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == WARRIOR)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s warrior [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == ROGUE)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s rogue [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == PRIEST)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s priest [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == MAGE)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s mage [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == WARLOCK)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s warlock [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == PALADIN)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s paladin [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == HUNTER)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s hunter [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == SHAMAN)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s shaman [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		else if(class_ == DRUID)
+		{
+		snprintf(welcomenewplayer, 1024, "[|cff00ff00Zone|r] Welcome new %s druid [|Hplayer:%s|h%s%s|h|r].", (m_session->GetPlayer()->getGender() ? "Sister" : "Brother"), m_session->GetPlayer()->GetName(), MSG_COLOR_WHITE, m_session->GetPlayer()->GetName());
+		}
+		sWorld.SendWorldText(welcomenewplayer);
+
 		sHookInterface.OnFirstEnterWorld(this);
 		LevelInfo* Info = objmgr.GetLevelInfo(getRace(), getClass(), startlevel);
 		ApplyLevelInfo(Info, startlevel);
