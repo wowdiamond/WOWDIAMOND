@@ -1672,8 +1672,41 @@ void Object::SpellNonMeleeDamageLog(Unit* pVictim, uint32 spellID, uint32 damage
 		Unit* caster = TO< Unit* >(this);
 
 		caster->RemoveAurasByInterruptFlag(AURA_INTERRUPT_ON_START_ATTACK);
-
-		res += static_cast< float >( caster->GetSpellDmgBonus(pVictim, spellInfo, damage, false) );
+		int bonusSD = 1.0f;
+		switch(caster->getClass())
+		{
+			case WARRIOR:
+				bonusSD = 1.0f;
+				break;
+			case ROGUE:
+				bonusSD = 1.0f;
+				break;
+			case PALADIN:
+				bonusSD = 60.0f;
+				break;
+			case HUNTER:
+				bonusSD = 1.0f;
+				break;
+			case WARLOCK:
+				bonusSD = 100.0f;
+				break;
+			case PRIEST:
+				bonusSD = 100.0f;
+				break;
+			case MAGE:
+				bonusSD = 1000.0f;
+				break;
+			case SHAMAN:
+				bonusSD = 100.0f;
+				break;
+			case DRUID:
+				bonusSD = 100.0f;
+				break;
+			case DEATHKNIGHT:
+				bonusSD = 1.0f;
+				break;
+		}
+		res += static_cast< float >( caster->GetSpellDmgBonus(pVictim, spellInfo, damage, false) * bonusSD);
 
 		if(res < 0.0f)
 			res = 0.0f;
