@@ -508,7 +508,7 @@ bool ChatHandler::HandleBanCharacterCommand(const char* args, WorldSession* m_se
 
 	sGMLog.writefromsession(m_session, "banned %s, reason %s, for %s", pCharacter, (pReason == NULL) ? "No reason" : pReason, BanTime ? ConvertTimeStampToString(BanTime).c_str() : "ever");
 	char msg[200];
-	snprintf(msg, 200, "%sGM: %s has been banned by %s for %s. Reason: %s", MSG_COLOR_RED, pCharacter, m_session->GetPlayer()->GetName(), BanTime ? ConvertTimeStampToString(BanTime).c_str() : "ever", (pReason == NULL) ? "No reason." : pReason);
+	snprintf(msg, 200, "%s[SYSTEM]: [%s] has been banned by [%s] for [%s]. Reason: [%s]", MSG_COLOR_RED, pCharacter, m_session->GetPlayer()->GetName(), BanTime ? ConvertTimeStampToString(BanTime).c_str() : "ever", (pReason == NULL) ? "No reason." : pReason);
 	sWorld.SendWorldText(msg, NULL);
 	if(sWorld.m_banTable && pInfo)
 	{
@@ -606,12 +606,12 @@ bool ChatHandler::HandleUnBanCharacterCommand(const char* args, WorldSession* m_
 	Player* pPlayer = ObjectMgr::getSingleton().GetPlayer(Character, false);
 	if(pPlayer != 0)
 	{
-		GreenSystemMessage(m_session, "Unbanned player %s ingame.", pPlayer->GetName());
+		SystemMessage(m_session, "Unbanned player [%s] ingame.", pPlayer->GetName());
 		pPlayer->UnSetBanned();
 	}
 	else
 	{
-		GreenSystemMessage(m_session, "Player %s not found ingame.", Character);
+		RedSystemMessage(m_session, "Player %s not found ingame.", Character);
 	}
 
 	// Ban in database
