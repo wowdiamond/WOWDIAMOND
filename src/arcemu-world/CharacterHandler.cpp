@@ -1003,10 +1003,15 @@ void WorldSession::FullLogin(Player* plr)
 
 	// Send MOTD
 	_player->BroadcastMessage(sWorld.GetMotd());
+	
+		if(_player->GetSession()->HasGMPermissions())
+	{
+		_player->BroadcastMessage("As Gamemoderator join the staff channel by typing /join [%s].", sWorld.getGmClientChannel().c_str());
+	}
 
 		// send to gms
 	if( HasGMPermissions() )
-		sWorld.SendMessageToGMs(this,"GM %s (%s) is now online. (Permissions: [%s])", _player->GetName(), GetAccountNameS(), GetPermissions());
+		sWorld.SendMessageToGMs(this,"[SYSTEM]: %s (%s) is now online. (Permissions: [%s])", _player->GetName(), GetAccountNameS(), GetPermissions());
 
 	//Set current RestState
 	if(plr->m_isResting)
