@@ -142,7 +142,7 @@ bool ChatHandler::HandleGMOnCommand(const char* args, WorldSession *m_session)
 	m_session->GetPlayer( )->SetUInt32Value( PLAYER_BYTES_2, newbytes);
 
 	GreenSystemMessage(m_session, "GM Flag Set.");*/
-	GreenSystemMessage(m_session, "Setting GM Flag on yourself...");
+	GreenSystemMessage(m_session, "Setting GM Flag on yourself.");
 	Player* _player = m_session->GetPlayer();
 	if(_player->HasFlag(PLAYER_FLAGS, PLAYER_FLAG_GM))
 		RedSystemMessage(m_session, "GM Flag is already set on. Use .gm off to disable it.");
@@ -260,10 +260,10 @@ bool ChatHandler::HandleKickCommand(const char* args, WorldSession *m_session)
 		}*/ // we might have to re-work this
 
 		char msg[200];
-		snprintf(msg, 200, "%sGM: %s was kicked from the server by %s. Reason: %s", MSG_COLOR_RED, chr->GetName(), m_session->GetPlayer()->GetName(), kickreason.c_str());
+		snprintf(msg, 200, "%s[SYSTEM]: %s was kicked from the server by [%s]. Reason: [%s]", MSG_COLOR_RED, chr->GetName(), m_session->GetPlayer()->GetName(), kickreason.c_str());
 		sWorld.SendWorldText(msg, NULL);
 		//sWorld.SendIRCMessage(msg);
-		SystemMessageToPlr(chr, "You are being kicked from the server by %s. Reason: %s", m_session->GetPlayer()->GetName(), kickreason.c_str());
+		SystemMessageToPlr(chr, "You are being kicked from the server by [%s]. Reason: [%s]", m_session->GetPlayer()->GetName(), kickreason.c_str());
 
 		chr->Kick(6000);
 		
