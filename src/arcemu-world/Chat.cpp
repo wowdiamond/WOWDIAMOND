@@ -635,9 +635,9 @@ void CommandTableStorage::Init()
 
 	static ChatCommand kickCommandTable[] =
 	{
-		{ "player",  'f', &ChatHandler::HandleKillByPlayerCommand,  "Disconnects the player with name <s>.",          NULL, 0, 0, 0 },
-		{ "account", 'f', &ChatHandler::HandleKillBySessionCommand, "Disconnects the session with account name <s>.", NULL, 0, 0, 0 },
-		{ "ip",      'f', &ChatHandler::HandleKillByIPCommand,      "Disconnects the session with the ip <s>.",       NULL, 0, 0, 0 },
+		{ "player",  'f', &ChatHandler::HandleKickCommand,  	"Kicks the selected player!",          NULL, 0, 0, 0 },
+		{ "account", 'f', &ChatHandler::HandleKickCommand, 		"Kicks the selected player!", 			NULL, 0, 0, 0 },
+		{ "ip",      'f', &ChatHandler::HandleKickCommand,     	"Kicks the selected player!",       	NULL, 0, 0, 0 },
 		{ NULL,        '0', NULL,                                     "",                                               NULL, 0, 0, 0 }
 	};
 	dupe_command_table(kickCommandTable, _kickCommandTable);
@@ -747,7 +747,7 @@ void CommandTableStorage::Init()
 		{ "character",       '0', NULL,                                                     "",                                                                                                                                        characterCommandTable,    0, 0, 0 },
 		{ "lookup",          '0', NULL,                                                     "",                                                                                                                                        lookupCommandTable,       0, 0, 0 },
 		{ "admin",           '0', NULL,                                                     "",                                                                                                                                        adminCommandTable,        0, 0, 0 },
-		{ "kick",            '0', NULL,                                                     "",                                                                                                                                        kickCommandTable,         0, 0, 0 },
+		{ "kick",            '0', &ChatHandler::HandleKickCommand,                          "Kicks player from the server",                                                                                                                                        kickCommandTable,         0, 0, 0 },
 		{ "ban",             '0', NULL,                                                     "",                                                                                                                                        banCommandTable,          0, 0, 0 },
 		{ "unban",           '0', NULL,                                                     "",                                                                                                                                        unbanCommandTable,        0, 0, 0 },
 		{ "instance",        '0', NULL,                                                     "",                                                                                                                                        instanceCommandTable,     0, 0, 0 },
